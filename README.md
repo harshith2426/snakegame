@@ -2,6 +2,23 @@
 
 SnakeArcade is a single-player desktop Snake game planned in C++17 with SFML 2.6.
 
+## Build the starter project on Windows
+
+Install the required tools and follow the shared setup instructions in [Required installations](docs/required-installations.md). From an MSYS2 UCRT64 terminal at the repository root, run:
+
+```bash
+cmake -S . -B build -G "MinGW Makefiles"
+cmake --build build
+```
+
+The first configure fetches SFML 2.6.2 automatically. The starter opens a blank 800×600 SFML window; gameplay features are implemented in later sprint tasks.
+
+Run the built starter with:
+
+```bash
+./build/snakearcade.exe
+```
+
 ## Shared project references
 
 The original v1.0 documents remain the team's requirements, architecture, and test-plan baseline. The Day 2 architecture notes record the current Sai/Rohil swap from the sprint board without altering those PDFs.
