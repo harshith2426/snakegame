@@ -23,7 +23,11 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-GitHub Actions runs the same configure, build, and test steps on every push and pull request. The initial test confirms that the GoogleTest runner executes assertions; focused gameplay tests will be added as game logic is implemented.
+GitHub Actions runs the same configure, build, and test steps on every push and pull request. Tests include a runner smoke test and focused snake-model checks; additional gameplay tests will be added with later features.
+
+## Day 6 snake model
+
+The initial snake is represented as head-first integer grid coordinates, with board dimensions and starting length in `src/model/GameConfig.hpp`. See [Day 6 snake model](docs/day6-snake-model.md) for the starting position and model contract.
 
 Run the built starter with:
 
