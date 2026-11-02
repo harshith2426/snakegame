@@ -10,7 +10,7 @@ This guide prepares each teammate's Windows computer to build SnakeArcade with C
 | MSYS2 UCRT64 with MinGW-w64 GCC and Make | Provides the 64-bit Windows C++ compiler and build tool | Install [MSYS2](https://www.msys2.org/), then follow the setup below. Check with `g++ --version` and `mingw32-make --version`. |
 | CMake | Reads the project build instructions and generates the native build | Install [CMake](https://cmake.org/download/) or its MSYS2 UCRT64 package. Check with `cmake --version`. |
 
-**SFML 2.6.2 is fetched and built by the repository's CMake configuration.** Do not install SFML separately or add local SFML include/library paths. The first configure needs an internet connection.
+**SFML 2.6.2 and GoogleTest v1.15.2 are fetched and built by the repository's CMake configuration.** Do not install SFML or GoogleTest separately or add local include/library paths. The first configure needs an internet connection.
 
 ## Install the compiler toolchain
 
@@ -46,11 +46,12 @@ In the UCRT64 terminal, move to the parent folder where you keep projects, then 
 ```bash
 git clone https://github.com/harshith2426/snakegame.git
 cd snakegame
-cmake -S . -B build -G "MinGW Makefiles"
+cmake -S . -B build -G "MinGW Makefiles" -DBUILD_TESTING=ON
 cmake --build build
+ctest --test-dir build --output-on-failure
 ```
 
-The first configure fetches and builds the pinned SFML release and may take a few minutes. Generated files stay in `build/`; do not commit that folder. If CMake cached another compiler or generator, remove the `build/` folder and configure again from the UCRT64 terminal.
+The first configure fetches and builds the pinned SFML and GoogleTest releases and may take a few minutes. Generated files stay in `build/`; do not commit that folder. If CMake cached another compiler or generator, remove the `build/` folder and configure again from the UCRT64 terminal.
 
 ## Team consistency
 

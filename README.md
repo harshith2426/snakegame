@@ -13,6 +13,18 @@ cmake --build build
 
 The first configure fetches SFML 2.6.2 automatically. The starter opens a blank 800×600 SFML window through `GameController`; its loop separates event handling, update, and rendering. Gameplay features are added in later sprint tasks.
 
+## Build and run automated tests
+
+GoogleTest is fetched automatically by CMake when testing is enabled. From the MSYS2 UCRT64 terminal at the repository root, configure and build the game and test target, then run the tests with CTest:
+
+```bash
+cmake -S . -B build -G "MinGW Makefiles" -DBUILD_TESTING=ON
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
+
+GitHub Actions runs the same configure, build, and test steps on every push and pull request. The initial test confirms that the GoogleTest runner executes assertions; focused gameplay tests will be added as game logic is implemented.
+
 Run the built starter with:
 
 ```bash
