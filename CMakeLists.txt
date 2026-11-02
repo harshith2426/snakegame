@@ -22,6 +22,7 @@ FetchContent_MakeAvailable(SFML)
 add_executable(snakearcade
     src/main.cpp
     src/controller/GameController.cpp
+    src/model/Snake.cpp
 )
 
 target_include_directories(snakearcade PRIVATE src)
@@ -41,7 +42,10 @@ if(BUILD_TESTING)
 
     add_executable(snakearcade_tests
         tests/TestRunnerTests.cpp
+        tests/model/SnakeTests.cpp
+        src/model/Snake.cpp
     )
+    target_include_directories(snakearcade_tests PRIVATE src)
     target_compile_features(snakearcade_tests PRIVATE cxx_std_17)
     target_link_libraries(snakearcade_tests PRIVATE GTest::gtest_main)
 
