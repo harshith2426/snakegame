@@ -11,7 +11,7 @@ cmake -S . -B build -G "MinGW Makefiles"
 cmake --build build
 ```
 
-The first configure fetches SFML 2.6.2 automatically. The starter opens a blank 800×600 SFML window; gameplay features are implemented in later sprint tasks.
+The first configure fetches SFML 2.6.2 automatically. The starter opens a blank 800×600 SFML window through `GameController`; its loop separates event handling, update, and rendering. Gameplay features are added in later sprint tasks.
 
 Run the built starter with:
 
