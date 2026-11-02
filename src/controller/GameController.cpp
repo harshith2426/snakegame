@@ -1,12 +1,34 @@
 #include "controller/GameController.hpp"
+#include "model/GameConfig.hpp"
 
 #include <SFML/Graphics.hpp>
 
 #include <cstdlib>
 
+namespace
+{
+using snakearcade::model::Direction;
+
+bool directionForKey(sf::Keyboard::Key key, Direction& direction)
+{
+    switch (key)
+    {
+    case sf::Keyboard::Up:
+    case sf::Keyboard::W: direction = Direction::Up; return true;
+    case sf::Keyboard::Down:
+    case sf::Keyboard::S: direction = Direction::Down; return true;
+    case sf::Keyboard::Left:
+    case sf::Keyboard::A: direction = Direction::Left; return true;
+    case sf::Keyboard::Right:
+    case sf::Keyboard::D: direction = Direction::Right; return true;
+    default: return false;
+    }
+}
+} // namespace
+
 int GameController::run()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SnakeArcade");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SnakeArcade - Arrow keys or WASD to move");
     if (!window.isOpen())
     {
         return EXIT_FAILURE;
@@ -40,17 +62,41 @@ void GameController::processEvents(sf::RenderWindow& window)
         {
             window.close();
         }
+        else if (event.type == sf::Event::KeyPressed)
+        {
+            Direction requestedDirection{};
+            if (directionForKey(event.key.code, requestedDirection))
+            {
+                snake_.setDirection(requestedDirection);
+            }
+        }
     }
 }
 
 void GameController::update(float elapsedSeconds)
 {
-    // Gameplay state and model updates are introduced in later sprint tasks.
-    (void)elapsedSeconds;
+    const int movementTicks = movementTimer_.advance(elapsedSeconds);
+    for (int tick = 0; tick < movementTicks; ++tick)
+    {
+        snake_.move();
+    }
 }
 
 void GameController::render(sf::RenderWindow& window)
 {
-    window.clear(sf::Color::Black);
+    using namespace snakearcade;
+    window.clear(sf::Color(18, 24, 32));
+
+    sf::RectangleShape cell(sf::Vector2f(
+        static_cast<float>(config::CellSizePixels - 2),
+        static_cast<float>(config::CellSizePixels - 2)));
+    for (const model::GridPosition segment : snake_.segments())
+    {
+        cell.setPosition(static_cast<float>(segment.x * config::CellSizePixels + 1),
+                         static_cast<float>(segment.y * config::CellSizePixels + 1));
+        cell.setFillColor(segment == snake_.head() ? sf::Color(80, 220, 120)
+                                                   : sf::Color(40, 160, 90));
+        window.draw(cell);
+    }
     window.display();
 }
