@@ -35,6 +35,12 @@ Run the built starter with:
 ./build/snakearcade.exe
 ```
 
+## Day 7 directional movement
+
+Use the arrow keys or WASD to steer the snake. Movement advances one grid cell
+every 0.15 seconds, independent of the rendering frame rate. Immediate reverse
+turns are ignored. See [Day 7 directional movement](docs/day7-directional-movement.md).
+
 ## Shared project references
 
 The original v1.0 documents remain the team's requirements, architecture, and test-plan baseline. The Day 2 architecture notes record the current Sai/Rohil swap from the sprint board without altering those PDFs.

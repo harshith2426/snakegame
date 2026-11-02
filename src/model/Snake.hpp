@@ -16,6 +16,8 @@ public:
     const std::vector<GridPosition>& segments() const noexcept;
     GridPosition head() const noexcept;
     Direction direction() const noexcept;
+    bool setDirection(Direction direction) noexcept;
+    void move();
     std::size_t length() const noexcept;
     bool occupies(GridPosition position) const noexcept;
 

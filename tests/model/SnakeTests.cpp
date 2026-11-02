@@ -74,4 +74,41 @@ TEST(SnakeTests, OccupancyQueryFindsBodyCells)
     EXPECT_TRUE(snake.occupies(snake.segments().back()));
     EXPECT_FALSE(snake.occupies({0, 0}));
 }
+
+TEST(SnakeTests, MovesOneGridCellAndKeepsItsLength)
+{
+    Snake snake;
+    snake.move();
+
+    EXPECT_EQ(snake.head(), (GridPosition{config::BoardColumns / 2 + 1,
+                                         config::BoardRows / 2}));
+    EXPECT_EQ(snake.segments()[1], (GridPosition{config::BoardColumns / 2,
+                                                config::BoardRows / 2}));
+    EXPECT_EQ(snake.length(), config::InitialSnakeLength);
+}
+
+TEST(SnakeTests, RejectsImmediateReverseAndAllowsPerpendicularTurns)
+{
+    Snake snake;
+
+    EXPECT_FALSE(snake.setDirection(Direction::Left));
+    EXPECT_EQ(snake.direction(), Direction::Right);
+    EXPECT_TRUE(snake.setDirection(Direction::Up));
+    EXPECT_EQ(snake.direction(), Direction::Up);
+    EXPECT_FALSE(snake.setDirection(Direction::Down));
+}
+
+TEST(SnakeTests, DoesNotMoveOutsideTheBoard)
+{
+    Snake snake;
+    EXPECT_TRUE(snake.setDirection(Direction::Up));
+    for (int step = 0; step < config::BoardRows; ++step)
+    {
+        snake.move();
+    }
+
+    EXPECT_TRUE(isWithinBoard(snake.head()));
+    EXPECT_EQ(snake.head().y, 0);
+    EXPECT_EQ(snake.segments()[1], (GridPosition{config::BoardColumns / 2, 1}));
+}
 } // namespace snakearcade::model
