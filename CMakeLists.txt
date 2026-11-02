@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 project(SnakeArcade VERSION 0.1.0 LANGUAGES CXX)
 
 include(FetchContent)
+include(CTest)
 
 # The starter uses only SFML graphics/window/system. Keep the dependency build
 # small and compile it with the same MinGW toolchain as the game.
@@ -26,3 +27,24 @@ add_executable(snakearcade
 target_include_directories(snakearcade PRIVATE src)
 target_compile_features(snakearcade PRIVATE cxx_std_17)
 target_link_libraries(snakearcade PRIVATE sfml-graphics sfml-window sfml-system)
+
+if(BUILD_TESTING)
+    FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.15.2
+        GIT_SHALLOW TRUE
+    )
+    # Keep GoogleTest's runtime consistent with the MinGW toolchain on Windows.
+    set(gtest_force_shared_crt ON CACHE BOOL "Use the shared runtime on Windows" FORCE)
+    FetchContent_MakeAvailable(googletest)
+
+    add_executable(snakearcade_tests
+        tests/TestRunnerTests.cpp
+    )
+    target_compile_features(snakearcade_tests PRIVATE cxx_std_17)
+    target_link_libraries(snakearcade_tests PRIVATE GTest::gtest_main)
+
+    include(GoogleTest)
+    gtest_discover_tests(snakearcade_tests)
+endif()
