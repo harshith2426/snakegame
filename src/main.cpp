@@ -1,24 +1,18 @@
-#include <SFML/Graphics.hpp>
+#include "controller/GameController.hpp"
+
+#include <exception>
+#include <iostream>
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SnakeArcade");
-    window.setFramerateLimit(60);
-
-    while (window.isOpen())
+    try
     {
-        sf::Event event{};
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-            }
-        }
-
-        window.clear(sf::Color::Black);
-        window.display();
+        GameController application;
+        return application.run();
     }
-
-    return 0;
+    catch (const std::exception& error)
+    {
+        std::cerr << "SnakeArcade could not start: " << error.what() << '\n';
+        return 1;
+    }
 }
