@@ -28,6 +28,13 @@ enum class Direction
     Right
 };
 
+enum class Collision
+{
+    None,
+    Wall,
+    Self
+};
+
 constexpr bool isWithinBoard(GridPosition position) noexcept
 {
     return position.x >= 0 && position.x < config::BoardColumns &&
