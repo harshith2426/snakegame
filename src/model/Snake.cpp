@@ -69,6 +69,18 @@ void Snake::move()
     segments_.front() = nextHead;
 }
 
+void Snake::grow(std::size_t amount)
+{
+    if (segments_.empty())
+    {
+        return;
+    }
+    for (std::size_t i = 0; i < amount; ++i)
+    {
+        segments_.push_back(segments_.back());
+    }
+}
+
 std::size_t Snake::length() const noexcept
 {
     return segments_.size();
