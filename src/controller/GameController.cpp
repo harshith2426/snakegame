@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <cstdlib>
+#include <string>
 
 namespace
 {
@@ -25,6 +26,13 @@ bool directionForKey(sf::Keyboard::Key key, Direction& direction)
     }
 }
 } // namespace
+
+GameController::GameController()
+    : food_(foodScoreManager_.spawnFood(snake_.segments())),
+      score_(0),
+      lastDisplayedScore_(-1)
+{
+}
 
 int GameController::run()
 {
@@ -79,13 +87,38 @@ void GameController::update(float elapsedSeconds)
     for (int tick = 0; tick < movementTicks; ++tick)
     {
         snake_.move();
+        if (food_.has_value() && foodScoreManager_.isConsumed(snake_.head(), *food_))
+        {
+            snake_.grow();
+            score_ = foodScoreManager_.applyScore(score_);
+            food_ = foodScoreManager_.spawnFood(snake_.segments());
+        }
     }
 }
 
 void GameController::render(sf::RenderWindow& window)
 {
     using namespace snakearcade;
+
+    if (score_ != lastDisplayedScore_)
+    {
+        window.setTitle("SnakeArcade - Score: " + std::to_string(score_) + " - Arrow keys or WASD to move");
+        lastDisplayedScore_ = score_;
+    }
+
     window.clear(sf::Color(18, 24, 32));
+
+    if (food_.has_value())
+    {
+        sf::RectangleShape foodCell(sf::Vector2f(
+            static_cast<float>(config::CellSizePixels - 2),
+            static_cast<float>(config::CellSizePixels - 2)));
+        foodCell.setPosition(
+            static_cast<float>(food_->x * config::CellSizePixels + 1),
+            static_cast<float>(food_->y * config::CellSizePixels + 1));
+        foodCell.setFillColor(sf::Color(230, 60, 60));
+        window.draw(foodCell);
+    }
 
     sf::RectangleShape cell(sf::Vector2f(
         static_cast<float>(config::CellSizePixels - 2),

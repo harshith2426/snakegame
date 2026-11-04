@@ -111,4 +111,37 @@ TEST(SnakeTests, DoesNotMoveOutsideTheBoard)
     EXPECT_EQ(snake.head().y, 0);
     EXPECT_EQ(snake.segments()[1], (GridPosition{config::BoardColumns / 2, 1}));
 }
+
+TEST(SnakeTests, GrowIncreasesLengthImmediately)
+{
+    Snake snake;
+    const std::size_t initialLength = snake.length();
+
+    snake.grow();
+
+    EXPECT_EQ(snake.length(), initialLength + 1);
+    EXPECT_EQ(snake.segments().size(), initialLength + 1);
+}
+
+TEST(SnakeTests, GrowRetainsTailPositionOnNextMove)
+{
+    Snake snake;
+    const GridPosition oldTail = snake.segments().back();
+
+    snake.grow();
+    snake.move();
+
+    EXPECT_EQ(snake.length(), config::InitialSnakeLength + 1);
+    EXPECT_EQ(snake.segments().back(), oldTail);
+}
+
+TEST(SnakeTests, GrowMultipleSegmentsAccumulates)
+{
+    Snake snake;
+    const std::size_t initialLength = snake.length();
+
+    snake.grow(3);
+
+    EXPECT_EQ(snake.length(), initialLength + 3);
+}
 } // namespace snakearcade::model
