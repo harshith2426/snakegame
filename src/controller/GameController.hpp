@@ -1,11 +1,6 @@
 #pragma once
 
-#include "model/CollisionManager.hpp"
-#include "model/FoodScoreManager.hpp"
-#include "model/MovementTimer.hpp"
-#include "model/Snake.hpp"
-
-#include <optional>
+#include "model/GameplaySession.hpp"
 
 namespace sf
 {
@@ -26,13 +21,7 @@ private:
     void update(float elapsedSeconds);
     void render(sf::RenderWindow& window);
 
-    snakearcade::model::Snake snake_;
-    snakearcade::model::MovementTimer movementTimer_;
-    snakearcade::model::FoodScoreManager foodScoreManager_;
-    snakearcade::model::CollisionManager collisionManager_;
-    std::optional<snakearcade::model::GridPosition> food_;
-    int score_{0};
+    snakearcade::model::GameplaySession session_;
     int lastDisplayedScore_{-1};
-    bool isGameOver_{false};
-    bool lastDisplayedGameOverState_{false};
+    bool lastDisplayedFinishedState_{false};
 };

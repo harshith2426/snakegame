@@ -28,27 +28,22 @@ bool directionForKey(sf::Keyboard::Key key, Direction& direction)
 } // namespace
 
 GameController::GameController()
-    : food_(foodScoreManager_.spawnFood(snake_.segments())),
-      score_(0),
+    : session_(),
       lastDisplayedScore_(-1),
-      isGameOver_(false),
-      lastDisplayedGameOverState_(false)
+      lastDisplayedFinishedState_(false)
 {
 }
 
 bool GameController::isGameOver() const noexcept
 {
-    return isGameOver_;
+    return session_.isGameOver();
 }
 
 void GameController::restart()
 {
-    snake_.reset();
-    score_ = 0;
+    session_.restart();
     lastDisplayedScore_ = -1;
-    lastDisplayedGameOverState_ = false;
-    isGameOver_ = false;
-    food_ = foodScoreManager_.spawnFood(snake_.segments());
+    lastDisplayedFinishedState_ = false;
 }
 
 int GameController::run()
@@ -89,7 +84,7 @@ void GameController::processEvents(sf::RenderWindow& window)
         }
         else if (event.type == sf::Event::KeyPressed)
         {
-            if (isGameOver_)
+            if (session_.isFinished())
             {
                 if (event.key.code == sf::Keyboard::R)
                 {
@@ -101,7 +96,7 @@ void GameController::processEvents(sf::RenderWindow& window)
                 Direction requestedDirection{};
                 if (directionForKey(event.key.code, requestedDirection))
                 {
-                    snake_.setDirection(requestedDirection);
+                    session_.requestDirection(requestedDirection);
                 }
             }
         }
@@ -110,62 +105,41 @@ void GameController::processEvents(sf::RenderWindow& window)
 
 void GameController::update(float elapsedSeconds)
 {
-    if (isGameOver_)
-    {
-        return;
-    }
-
-    const int movementTicks = movementTimer_.advance(elapsedSeconds);
-    for (int tick = 0; tick < movementTicks; ++tick)
-    {
-        const snakearcade::model::GridPosition next = snake_.nextHead();
-        const snakearcade::model::Collision collision =
-            collisionManager_.checkCollision(next, snake_.segments());
-
-        if (collision != snakearcade::model::Collision::None)
-        {
-            isGameOver_ = true;
-            break;
-        }
-
-        snake_.move();
-        if (food_.has_value() && foodScoreManager_.isConsumed(snake_.head(), *food_))
-        {
-            snake_.grow();
-            score_ = foodScoreManager_.applyScore(score_);
-            food_ = foodScoreManager_.spawnFood(snake_.segments());
-        }
-    }
+    session_.advance(elapsedSeconds);
 }
 
 void GameController::render(sf::RenderWindow& window)
 {
     using namespace snakearcade;
 
-    if (score_ != lastDisplayedScore_ || isGameOver_ != lastDisplayedGameOverState_)
+    if (session_.score() != lastDisplayedScore_ || session_.isFinished() != lastDisplayedFinishedState_)
     {
-        if (isGameOver_)
+        if (session_.isWon())
         {
-            window.setTitle("SnakeArcade - GAME OVER! Final Score: " + std::to_string(score_) + " - Press R to restart");
+            window.setTitle("SnakeArcade - YOU WIN! Final Score: " + std::to_string(session_.score()) + " - Press R to restart");
+        }
+        else if (session_.isGameOver())
+        {
+            window.setTitle("SnakeArcade - GAME OVER! Final Score: " + std::to_string(session_.score()) + " - Press R to restart");
         }
         else
         {
-            window.setTitle("SnakeArcade - Score: " + std::to_string(score_) + " - Arrow keys or WASD to move");
+            window.setTitle("SnakeArcade - Score: " + std::to_string(session_.score()) + " - Arrow keys or WASD to move");
         }
-        lastDisplayedScore_ = score_;
-        lastDisplayedGameOverState_ = isGameOver_;
+        lastDisplayedScore_ = session_.score();
+        lastDisplayedFinishedState_ = session_.isFinished();
     }
 
     window.clear(sf::Color(18, 24, 32));
 
-    if (food_.has_value() && !isGameOver_)
+    if (session_.food().has_value() && !session_.isFinished())
     {
         sf::RectangleShape foodCell(sf::Vector2f(
             static_cast<float>(config::CellSizePixels - 2),
             static_cast<float>(config::CellSizePixels - 2)));
         foodCell.setPosition(
-            static_cast<float>(food_->x * config::CellSizePixels + 1),
-            static_cast<float>(food_->y * config::CellSizePixels + 1));
+            static_cast<float>(session_.food()->x * config::CellSizePixels + 1),
+            static_cast<float>(session_.food()->y * config::CellSizePixels + 1));
         foodCell.setFillColor(sf::Color(230, 60, 60));
         window.draw(foodCell);
     }
@@ -173,19 +147,19 @@ void GameController::render(sf::RenderWindow& window)
     sf::RectangleShape cell(sf::Vector2f(
         static_cast<float>(config::CellSizePixels - 2),
         static_cast<float>(config::CellSizePixels - 2)));
-    for (const model::GridPosition segment : snake_.segments())
+    for (const model::GridPosition segment : session_.snake().segments())
     {
         cell.setPosition(static_cast<float>(segment.x * config::CellSizePixels + 1),
                          static_cast<float>(segment.y * config::CellSizePixels + 1));
 
-        if (isGameOver_)
+        if (session_.isFinished())
         {
-            cell.setFillColor(segment == snake_.head() ? sf::Color(230, 80, 80)
+            cell.setFillColor(segment == session_.snake().head() ? sf::Color(230, 80, 80)
                                                        : sf::Color(150, 60, 60));
         }
         else
         {
-            cell.setFillColor(segment == snake_.head() ? sf::Color(80, 220, 120)
+            cell.setFillColor(segment == session_.snake().head() ? sf::Color(80, 220, 120)
                                                        : sf::Color(40, 160, 90));
         }
         window.draw(cell);
