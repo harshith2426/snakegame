@@ -2,7 +2,7 @@
 
 SnakeArcade is a single-player desktop Snake game planned in C++17 with SFML 2.6.
 
-## Build the starter project on Windows
+## Build the project on Windows
 
 Install the required tools and follow the shared setup instructions in [Required installations](docs/required-installations.md). From an MSYS2 UCRT64 terminal at the repository root, run:
 
@@ -11,7 +11,7 @@ cmake -S . -B build -G "MinGW Makefiles"
 cmake --build build
 ```
 
-The first configure fetches SFML 2.6.2 automatically. The starter opens a blank 800×600 SFML window through `GameController`; its loop separates event handling, update, and rendering. Gameplay features are added in later sprint tasks.
+The first configure fetches SFML 2.6.2 automatically. The game opens an 800×600 window with a 40×30 cell board. Use the arrow keys or WASD to steer, collect food to grow and score, and avoid walls and the snake's body. Press **R** after game over to restart.
 
 ## Build and run automated tests
 
@@ -23,13 +23,13 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-GitHub Actions runs the same configure, build, and test steps on every push and pull request. Tests include a runner smoke test and focused snake-model checks; additional gameplay tests will be added with later features.
+GitHub Actions runs the same configure, build, and test steps on every push and pull request. Automated tests cover the snake model, movement timing, food/scoring, collision rules, and integrated gameplay session behavior.
 
 ## Day 6 snake model
 
-The initial snake is represented as head-first integer grid coordinates, with board dimensions and starting length in `src/model/GameConfig.hpp`. See [Day 6 snake model](docs/day6-snake-model.md) for the starting position and model contract.
+The snake is represented as head-first integer grid coordinates, with board dimensions and starting length in `src/model/GameConfig.hpp`. See [Day 6 snake model](docs/day6-snake-model.md) for the starting position and model contract.
 
-Run the built starter with:
+Run the built game with:
 
 ```bash
 ./build/snakearcade.exe
@@ -40,6 +40,10 @@ Run the built starter with:
 Use the arrow keys or WASD to steer the snake. Movement advances one grid cell
 every 0.15 seconds, independent of the rendering frame rate. Immediate reverse
 turns are ignored. See [Day 7 directional movement](docs/day7-directional-movement.md).
+
+## Day 10 integrated gameplay
+
+See [Day 10 integrated gameplay](docs/day10-core-gameplay.md) for the integrated session rules and verification scope.
 
 ## Shared project references
 

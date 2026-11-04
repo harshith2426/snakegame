@@ -27,4 +27,9 @@ int MovementTimer::advance(float elapsedSeconds) noexcept
     }
     return ticks;
 }
+
+void MovementTimer::reset() noexcept
+{
+    accumulatedSeconds_ = 0.0F;
+}
 } // namespace snakearcade::model

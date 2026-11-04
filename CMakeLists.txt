@@ -26,6 +26,7 @@ add_executable(snakearcade
     src/model/MovementTimer.cpp
     src/model/FoodScoreManager.cpp
     src/model/CollisionManager.cpp
+    src/model/GameplaySession.cpp
 )
 
 target_include_directories(snakearcade PRIVATE src)
@@ -49,10 +50,12 @@ if(BUILD_TESTING)
         tests/model/MovementTimerTests.cpp
         tests/model/FoodScoreManagerTests.cpp
         tests/model/CollisionManagerTests.cpp
+        tests/model/GameplaySessionTests.cpp
         src/model/Snake.cpp
         src/model/MovementTimer.cpp
         src/model/FoodScoreManager.cpp
         src/model/CollisionManager.cpp
+        src/model/GameplaySession.cpp
     )
     target_include_directories(snakearcade_tests PRIVATE src)
     target_compile_features(snakearcade_tests PRIVATE cxx_std_17)

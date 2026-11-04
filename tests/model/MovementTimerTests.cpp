@@ -28,4 +28,13 @@ TEST(MovementTimerTests, IgnoresInvalidOrNegativeElapsedTime)
     EXPECT_EQ(timer.advance(std::numeric_limits<float>::infinity()), 0);
     EXPECT_EQ(timer.advance(0.1F), 1);
 }
+
+TEST(MovementTimerTests, ResetDiscardsPartialMovementTime)
+{
+    MovementTimer timer(0.1F);
+    EXPECT_EQ(timer.advance(0.08F), 0);
+    timer.reset();
+    EXPECT_EQ(timer.advance(0.03F), 0);
+    EXPECT_EQ(timer.advance(0.07F), 1);
+}
 } // namespace snakearcade::model
