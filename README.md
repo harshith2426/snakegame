@@ -49,3 +49,4 @@ The original v1.0 documents remain the team's requirements, architecture, and te
 - [Combined SRS, SAD, and Software Test Plan v1.0](SnakeArcade_Combined_SRS_SAD_TestPlan_SECTIONG_TEAM1.pdf)
 - [Day 2 architecture and module interfaces](docs/architecture-day2.md)
 - [Required installations and setup instructions](docs/required-installations.md)
+- [Part 3 testing and report deliverables](docs/part3-testing-and-reports.md)
