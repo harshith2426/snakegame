@@ -15,6 +15,16 @@ Snake::Snake()
 {
 }
 
+Snake::Snake(std::vector<GridPosition> segments, Direction direction)
+    : segments_(std::move(segments)),
+      direction_(direction)
+{
+    if (segments_.empty())
+    {
+        reset();
+    }
+}
+
 const std::vector<GridPosition>& Snake::segments() const noexcept
 {
     return segments_;
@@ -23,6 +33,19 @@ const std::vector<GridPosition>& Snake::segments() const noexcept
 GridPosition Snake::head() const noexcept
 {
     return segments_.front();
+}
+
+GridPosition Snake::nextHead() const noexcept
+{
+    GridPosition next = head();
+    switch (direction_)
+    {
+    case Direction::Up: --next.y; break;
+    case Direction::Down: ++next.y; break;
+    case Direction::Left: --next.x; break;
+    case Direction::Right: ++next.x; break;
+    }
+    return next;
 }
 
 Direction Snake::direction() const noexcept
@@ -47,17 +70,10 @@ bool Snake::setDirection(Direction direction) noexcept
 
 void Snake::move()
 {
-    GridPosition nextHead = head();
-    switch (direction_)
-    {
-    case Direction::Up: --nextHead.y; break;
-    case Direction::Down: ++nextHead.y; break;
-    case Direction::Left: --nextHead.x; break;
-    case Direction::Right: ++nextHead.x; break;
-    }
+    const GridPosition nextHeadPos = nextHead();
     // Keep the model on the configured grid until collision/game-over behavior
-    // is implemented in its dedicated sprint task.
-    if (!isWithinBoard(nextHead))
+    // is triggered by the controller.
+    if (!isWithinBoard(nextHeadPos))
     {
         return;
     }
@@ -66,7 +82,7 @@ void Snake::move()
     {
         segments_[index] = segments_[index - 1];
     }
-    segments_.front() = nextHead;
+    segments_.front() = nextHeadPos;
 }
 
 void Snake::grow(std::size_t amount)
@@ -89,5 +105,14 @@ std::size_t Snake::length() const noexcept
 bool Snake::occupies(GridPosition position) const noexcept
 {
     return std::find(segments_.begin(), segments_.end(), position) != segments_.end();
+}
+
+void Snake::reset()
+{
+    segments_ = {
+        {config::BoardColumns / 2, config::BoardRows / 2},
+        {config::BoardColumns / 2 - 1, config::BoardRows / 2},
+        {config::BoardColumns / 2 - 2, config::BoardRows / 2}};
+    direction_ = Direction::Right;
 }
 } // namespace snakearcade::model

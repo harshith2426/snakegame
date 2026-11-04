@@ -30,8 +30,25 @@ bool directionForKey(sf::Keyboard::Key key, Direction& direction)
 GameController::GameController()
     : food_(foodScoreManager_.spawnFood(snake_.segments())),
       score_(0),
-      lastDisplayedScore_(-1)
+      lastDisplayedScore_(-1),
+      isGameOver_(false),
+      lastDisplayedGameOverState_(false)
 {
+}
+
+bool GameController::isGameOver() const noexcept
+{
+    return isGameOver_;
+}
+
+void GameController::restart()
+{
+    snake_.reset();
+    score_ = 0;
+    lastDisplayedScore_ = -1;
+    lastDisplayedGameOverState_ = false;
+    isGameOver_ = false;
+    food_ = foodScoreManager_.spawnFood(snake_.segments());
 }
 
 int GameController::run()
@@ -72,10 +89,20 @@ void GameController::processEvents(sf::RenderWindow& window)
         }
         else if (event.type == sf::Event::KeyPressed)
         {
-            Direction requestedDirection{};
-            if (directionForKey(event.key.code, requestedDirection))
+            if (isGameOver_)
             {
-                snake_.setDirection(requestedDirection);
+                if (event.key.code == sf::Keyboard::R)
+                {
+                    restart();
+                }
+            }
+            else
+            {
+                Direction requestedDirection{};
+                if (directionForKey(event.key.code, requestedDirection))
+                {
+                    snake_.setDirection(requestedDirection);
+                }
             }
         }
     }
@@ -83,9 +110,24 @@ void GameController::processEvents(sf::RenderWindow& window)
 
 void GameController::update(float elapsedSeconds)
 {
+    if (isGameOver_)
+    {
+        return;
+    }
+
     const int movementTicks = movementTimer_.advance(elapsedSeconds);
     for (int tick = 0; tick < movementTicks; ++tick)
     {
+        const snakearcade::model::GridPosition next = snake_.nextHead();
+        const snakearcade::model::Collision collision =
+            collisionManager_.checkCollision(next, snake_.segments());
+
+        if (collision != snakearcade::model::Collision::None)
+        {
+            isGameOver_ = true;
+            break;
+        }
+
         snake_.move();
         if (food_.has_value() && foodScoreManager_.isConsumed(snake_.head(), *food_))
         {
@@ -100,15 +142,23 @@ void GameController::render(sf::RenderWindow& window)
 {
     using namespace snakearcade;
 
-    if (score_ != lastDisplayedScore_)
+    if (score_ != lastDisplayedScore_ || isGameOver_ != lastDisplayedGameOverState_)
     {
-        window.setTitle("SnakeArcade - Score: " + std::to_string(score_) + " - Arrow keys or WASD to move");
+        if (isGameOver_)
+        {
+            window.setTitle("SnakeArcade - GAME OVER! Final Score: " + std::to_string(score_) + " - Press R to restart");
+        }
+        else
+        {
+            window.setTitle("SnakeArcade - Score: " + std::to_string(score_) + " - Arrow keys or WASD to move");
+        }
         lastDisplayedScore_ = score_;
+        lastDisplayedGameOverState_ = isGameOver_;
     }
 
     window.clear(sf::Color(18, 24, 32));
 
-    if (food_.has_value())
+    if (food_.has_value() && !isGameOver_)
     {
         sf::RectangleShape foodCell(sf::Vector2f(
             static_cast<float>(config::CellSizePixels - 2),
@@ -127,8 +177,17 @@ void GameController::render(sf::RenderWindow& window)
     {
         cell.setPosition(static_cast<float>(segment.x * config::CellSizePixels + 1),
                          static_cast<float>(segment.y * config::CellSizePixels + 1));
-        cell.setFillColor(segment == snake_.head() ? sf::Color(80, 220, 120)
-                                                   : sf::Color(40, 160, 90));
+
+        if (isGameOver_)
+        {
+            cell.setFillColor(segment == snake_.head() ? sf::Color(230, 80, 80)
+                                                       : sf::Color(150, 60, 60));
+        }
+        else
+        {
+            cell.setFillColor(segment == snake_.head() ? sf::Color(80, 220, 120)
+                                                       : sf::Color(40, 160, 90));
+        }
         window.draw(cell);
     }
     window.display();
