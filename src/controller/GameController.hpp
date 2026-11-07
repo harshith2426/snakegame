@@ -1,5 +1,6 @@
 #pragma once
 
+#include "controller/GameStateFlow.hpp"
 #include "model/GameplaySession.hpp"
 
 namespace sf
@@ -11,9 +12,11 @@ class GameController final
 {
 public:
     GameController();
+
     int run();
 
     bool isGameOver() const noexcept;
+
     void restart();
 
 private:
@@ -22,6 +25,5 @@ private:
     void render(sf::RenderWindow& window);
 
     snakearcade::model::GameplaySession session_;
-    int lastDisplayedScore_{-1};
-    bool lastDisplayedFinishedState_{false};
+    GameStateFlow stateFlow_;
 };
