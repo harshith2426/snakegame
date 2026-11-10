@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "model/CollisionManager.hpp"
@@ -15,13 +16,17 @@ class GameplaySession final
 public:
     GameplaySession();
 
-    // Deterministic setup for tests and controlled sessions. An absent or
-    // invalid/occupied food position is replaced with a valid spawn when possible.
+    // Deterministic setup for tests and controlled sessions.
     GameplaySession(Snake snake, std::optional<GridPosition> food, unsigned int seed);
 
     void requestDirection(Direction direction) noexcept;
     void advance(float elapsedSeconds) noexcept;
     void restart();
+
+    // Pause and resume functionality
+    void pause() noexcept;
+    void resume() noexcept;
+    bool isPaused() const noexcept;
 
     const Snake& snake() const noexcept;
     std::optional<GridPosition> food() const noexcept;
@@ -41,5 +46,6 @@ private:
     int score_{0};
     bool isGameOver_{false};
     bool isWon_{false};
+    bool isPaused_{false};
 };
 } // namespace snakearcade::model

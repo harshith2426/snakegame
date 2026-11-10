@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "model/GameplaySession.hpp"
@@ -24,4 +25,5 @@ private:
     snakearcade::model::GameplaySession session_;
     int lastDisplayedScore_{-1};
     bool lastDisplayedFinishedState_{false};
+    bool lastDisplayedPausedState_{false};
 };
