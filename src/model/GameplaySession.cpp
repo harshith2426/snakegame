@@ -5,18 +5,25 @@
 
 namespace snakearcade::model
 {
-GameplaySession::GameplaySession()
+GameplaySession::GameplaySession(config::Difficulty difficulty)
     : snake_(),
-      movementTimer_(),
+      difficulty_(difficulty),
+      movementTimer_(config::movementInterval(difficulty)),
       foodScoreManager_(),
       collisionManager_()
 {
     spawnFoodOrFinish();
 }
 
-GameplaySession::GameplaySession(Snake snake, std::optional<GridPosition> food, unsigned int seed)
+GameplaySession::GameplaySession(
+    Snake snake,
+    std::optional<GridPosition> food,
+    unsigned int seed,
+    config::Difficulty difficulty
+)
     : snake_(std::move(snake)),
-      movementTimer_(),
+      difficulty_(difficulty),
+      movementTimer_(config::movementInterval(difficulty)),
       foodScoreManager_(seed),
       collisionManager_(),
       food_(food)
@@ -37,7 +44,6 @@ void GameplaySession::requestDirection(Direction direction) noexcept
 
 void GameplaySession::advance(float elapsedSeconds) noexcept
 {
-    // Do not update the game while paused or finished.
     if (isFinished() || isPaused_)
     {
         return;
@@ -86,6 +92,11 @@ void GameplaySession::resume() noexcept
 bool GameplaySession::isPaused() const noexcept
 {
     return isPaused_;
+}
+
+config::Difficulty GameplaySession::difficulty() const noexcept
+{
+    return difficulty_;
 }
 
 void GameplaySession::restart()
@@ -139,4 +150,4 @@ void GameplaySession::spawnFoodOrFinish()
         isWon_ = true;
     }
 }
-} // namespace snakearcade::model
+}

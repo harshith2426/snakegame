@@ -23,6 +23,13 @@ private:
     void render(sf::RenderWindow& window);
 
     snakearcade::model::GameplaySession session_;
+
+    snakearcade::config::Difficulty selectedDifficulty_{
+        snakearcade::config::Difficulty::Medium
+    };
+
+    bool hasStarted_{false};
+
     int lastDisplayedScore_{-1};
     bool lastDisplayedFinishedState_{false};
     bool lastDisplayedPausedState_{false};

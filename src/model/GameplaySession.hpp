@@ -5,28 +5,33 @@
 #include "model/FoodScoreManager.hpp"
 #include "model/MovementTimer.hpp"
 #include "model/Snake.hpp"
+#include "model/GameConfig.hpp"
 
 #include <optional>
 
 namespace snakearcade::model
 {
-// Coordinates movement, food, scoring, collision, and end-of-session rules.
 class GameplaySession final
 {
 public:
-    GameplaySession();
+    explicit GameplaySession(config::Difficulty difficulty = config::Difficulty::Medium);
 
-    // Deterministic setup for tests and controlled sessions.
-    GameplaySession(Snake snake, std::optional<GridPosition> food, unsigned int seed);
+    GameplaySession(
+        Snake snake,
+        std::optional<GridPosition> food,
+        unsigned int seed,
+        config::Difficulty difficulty = config::Difficulty::Medium
+    );
 
     void requestDirection(Direction direction) noexcept;
     void advance(float elapsedSeconds) noexcept;
     void restart();
 
-    // Pause and resume functionality
     void pause() noexcept;
     void resume() noexcept;
     bool isPaused() const noexcept;
+
+    config::Difficulty difficulty() const noexcept;
 
     const Snake& snake() const noexcept;
     std::optional<GridPosition> food() const noexcept;
@@ -39,6 +44,7 @@ private:
     void spawnFoodOrFinish();
 
     Snake snake_;
+    config::Difficulty difficulty_;
     MovementTimer movementTimer_;
     FoodScoreManager foodScoreManager_;
     CollisionManager collisionManager_;
@@ -48,4 +54,4 @@ private:
     bool isWon_{false};
     bool isPaused_{false};
 };
-} // namespace snakearcade::model
+}

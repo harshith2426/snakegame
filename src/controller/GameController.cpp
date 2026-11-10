@@ -10,6 +10,7 @@
 namespace
 {
 using snakearcade::model::Direction;
+using snakearcade::config::Difficulty;
 
 bool directionForKey(sf::Keyboard::Key key, Direction& direction)
 {
@@ -39,10 +40,27 @@ bool directionForKey(sf::Keyboard::Key key, Direction& direction)
         return false;
     }
 }
+
+const char* difficultyName(Difficulty difficulty)
+{
+    switch (difficulty)
+    {
+    case Difficulty::Easy:
+        return "Easy";
+    case Difficulty::Medium:
+        return "Medium";
+    case Difficulty::Hard:
+        return "Hard";
+    }
+
+    return "Medium";
+}
 } // namespace
 
 GameController::GameController()
     : session_(),
+      selectedDifficulty_(Difficulty::Medium),
+      hasStarted_(false),
       lastDisplayedScore_(-1),
       lastDisplayedFinishedState_(false),
       lastDisplayedPausedState_(false)
@@ -67,7 +85,7 @@ int GameController::run()
 {
     sf::RenderWindow window(
         sf::VideoMode(800, 600),
-        "SnakeArcade - Arrow keys or WASD to move"
+        "SnakeArcade - Select Difficulty"
     );
 
     if (!window.isOpen())
@@ -76,6 +94,7 @@ int GameController::run()
     }
 
     window.setFramerateLimit(60);
+
     sf::Clock frameClock;
 
     while (window.isOpen())
@@ -108,14 +127,64 @@ void GameController::processEvents(sf::RenderWindow& window)
         }
         else if (event.type == sf::Event::KeyPressed)
         {
+            const sf::Keyboard::Key key = event.key.code;
+
+            // Difficulty selection before starting.
+            if (!hasStarted_)
+            {
+                bool difficultyChanged = true;
+
+                switch (key)
+                {
+                case sf::Keyboard::Num1:
+                    selectedDifficulty_ = Difficulty::Easy;
+                    break;
+
+                case sf::Keyboard::Num2:
+                    selectedDifficulty_ = Difficulty::Medium;
+                    break;
+
+                case sf::Keyboard::Num3:
+                    selectedDifficulty_ = Difficulty::Hard;
+                    break;
+
+                case sf::Keyboard::Return:
+                    session_ = snakearcade::model::GameplaySession(
+                        selectedDifficulty_
+                    );
+
+                    hasStarted_ = true;
+                    lastDisplayedScore_ = -1;
+                    lastDisplayedFinishedState_ = false;
+                    lastDisplayedPausedState_ = false;
+                    break;
+
+                default:
+                    difficultyChanged = false;
+                    break;
+                }
+
+                if (difficultyChanged && !hasStarted_)
+                {
+                    window.setTitle(
+                        std::string("SnakeArcade - Selected: ")
+                        + difficultyName(selectedDifficulty_)
+                    );
+                }
+
+                continue;
+            }
+
+            // Restart after game over or winning.
             if (session_.isFinished())
             {
-                if (event.key.code == sf::Keyboard::R)
+                if (key == sf::Keyboard::R)
                 {
                     restart();
                 }
             }
-            else if (event.key.code == sf::Keyboard::P)
+            // Pause and resume.
+            else if (key == sf::Keyboard::P)
             {
                 if (session_.isPaused())
                 {
@@ -126,11 +195,12 @@ void GameController::processEvents(sf::RenderWindow& window)
                     session_.pause();
                 }
             }
+            // Movement controls.
             else if (!session_.isPaused())
             {
                 Direction requestedDirection{};
 
-                if (directionForKey(event.key.code, requestedDirection))
+                if (directionForKey(key, requestedDirection))
                 {
                     session_.requestDirection(requestedDirection);
                 }
@@ -141,22 +211,89 @@ void GameController::processEvents(sf::RenderWindow& window)
 
 void GameController::update(float elapsedSeconds)
 {
-    session_.advance(elapsedSeconds);
+    if (hasStarted_)
+    {
+        session_.advance(elapsedSeconds);
+    }
 }
 
 void GameController::render(sf::RenderWindow& window)
 {
     using namespace snakearcade;
 
+    window.clear(sf::Color(18, 24, 32));
+
+    // Draw difficulty selection screen.
+    if (!hasStarted_)
+    {
+        sf::Font font;
+
+        if (!font.loadFromFile("assets/fonts/tuffy.ttf"))
+        {
+            window.setTitle(
+                "SnakeArcade - Font loading failed. Run from project root."
+            );
+            window.display();
+            return;
+        }
+
+        sf::Text heading("SNAKE ARCADE", font, 42);
+        heading.setFillColor(sf::Color::White);
+        heading.setPosition(250.0F, 100.0F);
+        window.draw(heading);
+
+        sf::Text instruction("SELECT YOUR DIFFICULTY", font, 25);
+        instruction.setFillColor(sf::Color(180, 190, 200));
+        instruction.setPosition(250.0F, 190.0F);
+        window.draw(instruction);
+
+        const char* options[] = {
+            "1. EASY",
+            "2. MEDIUM",
+            "3. HARD"
+        };
+
+        const Difficulty difficulties[] = {
+            Difficulty::Easy,
+            Difficulty::Medium,
+            Difficulty::Hard
+        };
+
+        for (int i = 0; i < 3; ++i)
+        {
+            sf::Text option(options[i], font, 30);
+
+            option.setFillColor(
+                selectedDifficulty_ == difficulties[i]
+                    ? sf::Color(80, 220, 120)
+                    : sf::Color::White
+            );
+
+            option.setPosition(310.0F, 270.0F + i * 55.0F);
+            window.draw(option);
+        }
+
+        sf::Text startInstruction(
+            "Press ENTER to start",
+            font,
+            22
+        );
+        startInstruction.setFillColor(sf::Color(180, 190, 200));
+        startInstruction.setPosition(290.0F, 480.0F);
+        window.draw(startInstruction);
+
+        window.display();
+        return;
+    }
+
+    // Update window title when game state changes.
     if (session_.score() != lastDisplayedScore_
         || session_.isFinished() != lastDisplayedFinishedState_
         || session_.isPaused() != lastDisplayedPausedState_)
     {
         if (session_.isPaused())
         {
-            window.setTitle(
-                "SnakeArcade - PAUSED - Press P to resume"
-            );
+            window.setTitle("SnakeArcade - PAUSED - Press P to resume");
         }
         else if (session_.isWon())
         {
@@ -177,7 +314,9 @@ void GameController::render(sf::RenderWindow& window)
         else
         {
             window.setTitle(
-                "SnakeArcade - Score: "
+                std::string("SnakeArcade - ")
+                + difficultyName(session_.difficulty())
+                + " - Score: "
                 + std::to_string(session_.score())
                 + " - P to pause"
             );
@@ -188,8 +327,7 @@ void GameController::render(sf::RenderWindow& window)
         lastDisplayedPausedState_ = session_.isPaused();
     }
 
-    window.clear(sf::Color(18, 24, 32));
-
+    // Draw food.
     if (session_.food().has_value() && !session_.isFinished())
     {
         sf::RectangleShape foodCell(sf::Vector2f(
@@ -198,14 +336,19 @@ void GameController::render(sf::RenderWindow& window)
         ));
 
         foodCell.setPosition(
-            static_cast<float>(session_.food()->x * config::CellSizePixels + 1),
-            static_cast<float>(session_.food()->y * config::CellSizePixels + 1)
+            static_cast<float>(
+                session_.food()->x * config::CellSizePixels + 1
+            ),
+            static_cast<float>(
+                session_.food()->y * config::CellSizePixels + 1
+            )
         );
 
         foodCell.setFillColor(sf::Color(230, 60, 60));
         window.draw(foodCell);
     }
 
+    // Draw snake.
     sf::RectangleShape cell(sf::Vector2f(
         static_cast<float>(config::CellSizePixels - 2),
         static_cast<float>(config::CellSizePixels - 2)
@@ -214,8 +357,12 @@ void GameController::render(sf::RenderWindow& window)
     for (const model::GridPosition segment : session_.snake().segments())
     {
         cell.setPosition(
-            static_cast<float>(segment.x * config::CellSizePixels + 1),
-            static_cast<float>(segment.y * config::CellSizePixels + 1)
+            static_cast<float>(
+                segment.x * config::CellSizePixels + 1
+            ),
+            static_cast<float>(
+                segment.y * config::CellSizePixels + 1
+            )
         );
 
         if (session_.isFinished())

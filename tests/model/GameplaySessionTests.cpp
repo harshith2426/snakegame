@@ -119,4 +119,67 @@ TEST(GameplaySessionTests, FullBoardProducesWinInsteadOfMissingFoodState)
     EXPECT_TRUE(session.isFinished());
     EXPECT_FALSE(session.isGameOver());
 }
+
+TEST(GameplaySessionTests, EasyDifficultyUsesSlowMovement)
+{
+    Snake snake;
+    GameplaySession session(
+        snake,
+        GridPosition{0, 0},
+        17,
+        config::Difficulty::Easy
+    );
+
+    session.advance(0.19F);
+    EXPECT_EQ(session.snake().head(), snake.head());
+
+    session.advance(0.01F);
+    EXPECT_NE(session.snake().head(), snake.head());
+}
+
+TEST(GameplaySessionTests, MediumDifficultyUsesNormalMovement)
+{
+    Snake snake;
+    GameplaySession session(
+        snake,
+        GridPosition{0, 0},
+        17,
+        config::Difficulty::Medium
+    );
+
+    session.advance(0.149F);
+    EXPECT_EQ(session.snake().head(), snake.head());
+
+    session.advance(0.001F);
+    EXPECT_NE(session.snake().head(), snake.head());
+}
+
+TEST(GameplaySessionTests, HardDifficultyUsesFastMovement)
+{
+    Snake snake;
+    GameplaySession session(
+        snake,
+        GridPosition{0, 0},
+        17,
+        config::Difficulty::Hard
+    );
+
+    session.advance(0.079F);
+    EXPECT_EQ(session.snake().head(), snake.head());
+
+    session.advance(0.001F);
+    EXPECT_NE(session.snake().head(), snake.head());
+}
+
+TEST(GameplaySessionTests, RestartPreservesSelectedDifficulty)
+{
+    GameplaySession session(config::Difficulty::Hard);
+
+    session.pause();
+    session.restart();
+
+    EXPECT_EQ(session.difficulty(), config::Difficulty::Hard);
+    EXPECT_FALSE(session.isPaused());
+}
+
 } // namespace snakearcade::model
