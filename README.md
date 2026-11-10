@@ -41,6 +41,28 @@ Use the arrow keys or WASD to steer the snake. Movement advances one grid cell
 every 0.15 seconds, independent of the rendering frame rate. Immediate reverse
 turns are ignored. See [Day 7 directional movement](docs/day7-directional-movement.md).
 
+## Difficulty Levels
+
+Before starting the game, select a difficulty:
+
+| Difficulty | Movement Interval | Speed |
+|---|---:|---|
+| Easy | 0.20 seconds | Slow |
+| Medium | 0.15 seconds | Normal |
+| Hard | 0.08 seconds | Fast |
+
+### Controls
+
+| Key | Action |
+|---|---|
+| 1 | Select Easy |
+| 2 | Select Medium |
+| 3 | Select Hard |
+| Enter | Start game |
+| Arrow keys / WASD | Move snake |
+| P | Pause / Resume |
+| R | Restart after Game Over or winning |
+
 ## Day 10 integrated gameplay
 
 See [Day 10 integrated gameplay](docs/day10-core-gameplay.md) for the integrated session rules and verification scope.
