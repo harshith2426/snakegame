@@ -2,6 +2,7 @@
 #pragma once
 
 #include "model/GameplaySession.hpp"
+#include "persistence/HighScoreManager.hpp"
 
 namespace sf
 {
@@ -24,11 +25,14 @@ private:
 
     snakearcade::model::GameplaySession session_;
 
+    snakearcade::persistence::HighScoreManager highScoreManager_;
+
     snakearcade::config::Difficulty selectedDifficulty_{
         snakearcade::config::Difficulty::Medium
     };
 
     bool hasStarted_{false};
+    bool highScoreSavedForCurrentGame_{false};
 
     int lastDisplayedScore_{-1};
     bool lastDisplayedFinishedState_{false};

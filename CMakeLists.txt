@@ -27,6 +27,7 @@ add_executable(snakearcade
     src/model/FoodScoreManager.cpp
     src/model/CollisionManager.cpp
     src/model/GameplaySession.cpp
+    src/persistence/HighScoreManager.cpp
 )
 
 target_include_directories(snakearcade PRIVATE src)
@@ -45,18 +46,20 @@ if(BUILD_TESTING)
     FetchContent_MakeAvailable(googletest)
 
     add_executable(snakearcade_tests
-        tests/TestRunnerTests.cpp
-        tests/model/SnakeTests.cpp
-        tests/model/MovementTimerTests.cpp
-        tests/model/FoodScoreManagerTests.cpp
-        tests/model/CollisionManagerTests.cpp
-        tests/model/GameplaySessionTests.cpp
-        src/model/Snake.cpp
-        src/model/MovementTimer.cpp
-        src/model/FoodScoreManager.cpp
-        src/model/CollisionManager.cpp
-        src/model/GameplaySession.cpp
-    )
+    tests/TestRunnerTests.cpp
+    tests/model/SnakeTests.cpp
+    tests/model/MovementTimerTests.cpp
+    tests/model/FoodScoreManagerTests.cpp
+    tests/model/CollisionManagerTests.cpp
+    tests/model/GameplaySessionTests.cpp
+    tests/persistence/HighScoreManagerTests.cpp
+    src/model/Snake.cpp
+    src/model/MovementTimer.cpp
+    src/model/FoodScoreManager.cpp
+    src/model/CollisionManager.cpp
+    src/model/GameplaySession.cpp
+    src/persistence/HighScoreManager.cpp
+)
     target_include_directories(snakearcade_tests PRIVATE src)
     target_compile_features(snakearcade_tests PRIVATE cxx_std_17)
     target_link_libraries(snakearcade_tests PRIVATE GTest::gtest_main)

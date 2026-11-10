@@ -59,12 +59,18 @@ const char* difficultyName(Difficulty difficulty)
 
 GameController::GameController()
     : session_(),
+      highScoreManager_("highscore.txt"),
       selectedDifficulty_(Difficulty::Medium),
       hasStarted_(false),
+      highScoreSavedForCurrentGame_(false),
       lastDisplayedScore_(-1),
       lastDisplayedFinishedState_(false),
       lastDisplayedPausedState_(false)
 {
+    highScoreManager_.load();
+
+    // Create the file with an initial score of 0 if it does not exist.
+    highScoreManager_.save();
 }
 
 bool GameController::isGameOver() const noexcept
@@ -75,6 +81,8 @@ bool GameController::isGameOver() const noexcept
 void GameController::restart()
 {
     session_.restart();
+
+    highScoreSavedForCurrentGame_ = false;
 
     lastDisplayedScore_ = -1;
     lastDisplayedFinishedState_ = false;
@@ -129,7 +137,6 @@ void GameController::processEvents(sf::RenderWindow& window)
         {
             const sf::Keyboard::Key key = event.key.code;
 
-            // Difficulty selection before starting.
             if (!hasStarted_)
             {
                 bool difficultyChanged = true;
@@ -154,6 +161,8 @@ void GameController::processEvents(sf::RenderWindow& window)
                     );
 
                     hasStarted_ = true;
+                    highScoreSavedForCurrentGame_ = false;
+
                     lastDisplayedScore_ = -1;
                     lastDisplayedFinishedState_ = false;
                     lastDisplayedPausedState_ = false;
@@ -175,7 +184,6 @@ void GameController::processEvents(sf::RenderWindow& window)
                 continue;
             }
 
-            // Restart after game over or winning.
             if (session_.isFinished())
             {
                 if (key == sf::Keyboard::R)
@@ -183,7 +191,6 @@ void GameController::processEvents(sf::RenderWindow& window)
                     restart();
                 }
             }
-            // Pause and resume.
             else if (key == sf::Keyboard::P)
             {
                 if (session_.isPaused())
@@ -195,7 +202,6 @@ void GameController::processEvents(sf::RenderWindow& window)
                     session_.pause();
                 }
             }
-            // Movement controls.
             else if (!session_.isPaused())
             {
                 Direction requestedDirection{};
@@ -211,9 +217,20 @@ void GameController::processEvents(sf::RenderWindow& window)
 
 void GameController::update(float elapsedSeconds)
 {
-    if (hasStarted_)
+    if (!hasStarted_)
     {
-        session_.advance(elapsedSeconds);
+        return;
+    }
+
+    session_.advance(elapsedSeconds);
+
+    // Save the score once when the game finishes.
+    if (session_.isFinished() && !highScoreSavedForCurrentGame_)
+    {
+        highScoreManager_.update(session_.score());
+
+        highScoreSavedForCurrentGame_ = true;
+        lastDisplayedScore_ = -1;
     }
 }
 
@@ -223,7 +240,6 @@ void GameController::render(sf::RenderWindow& window)
 
     window.clear(sf::Color(18, 24, 32));
 
-    // Draw difficulty selection screen.
     if (!hasStarted_)
     {
         sf::Font font;
@@ -273,20 +289,25 @@ void GameController::render(sf::RenderWindow& window)
             window.draw(option);
         }
 
-        sf::Text startInstruction(
-            "Press ENTER to start",
+        sf::Text highScoreText(
+            "HIGH SCORE: " + std::to_string(highScoreManager_.highScore()),
             font,
             22
         );
+
+        highScoreText.setFillColor(sf::Color(255, 210, 80));
+        highScoreText.setPosition(300.0F, 465.0F);
+        window.draw(highScoreText);
+
+        sf::Text startInstruction("Press ENTER to start", font, 22);
         startInstruction.setFillColor(sf::Color(180, 190, 200));
-        startInstruction.setPosition(290.0F, 480.0F);
+        startInstruction.setPosition(290.0F, 510.0F);
         window.draw(startInstruction);
 
         window.display();
         return;
     }
 
-    // Update window title when game state changes.
     if (session_.score() != lastDisplayedScore_
         || session_.isFinished() != lastDisplayedFinishedState_
         || session_.isPaused() != lastDisplayedPausedState_)
@@ -298,16 +319,20 @@ void GameController::render(sf::RenderWindow& window)
         else if (session_.isWon())
         {
             window.setTitle(
-                "SnakeArcade - YOU WIN! Final Score: "
+                "SnakeArcade - YOU WIN! Score: "
                 + std::to_string(session_.score())
+                + " | High Score: "
+                + std::to_string(highScoreManager_.highScore())
                 + " - Press R to restart"
             );
         }
         else if (session_.isGameOver())
         {
             window.setTitle(
-                "SnakeArcade - GAME OVER! Final Score: "
+                "SnakeArcade - GAME OVER! Score: "
                 + std::to_string(session_.score())
+                + " | High Score: "
+                + std::to_string(highScoreManager_.highScore())
                 + " - Press R to restart"
             );
         }
@@ -318,6 +343,8 @@ void GameController::render(sf::RenderWindow& window)
                 + difficultyName(session_.difficulty())
                 + " - Score: "
                 + std::to_string(session_.score())
+                + " - High Score: "
+                + std::to_string(highScoreManager_.highScore())
                 + " - P to pause"
             );
         }
@@ -327,7 +354,6 @@ void GameController::render(sf::RenderWindow& window)
         lastDisplayedPausedState_ = session_.isPaused();
     }
 
-    // Draw food.
     if (session_.food().has_value() && !session_.isFinished())
     {
         sf::RectangleShape foodCell(sf::Vector2f(
@@ -348,7 +374,6 @@ void GameController::render(sf::RenderWindow& window)
         window.draw(foodCell);
     }
 
-    // Draw snake.
     sf::RectangleShape cell(sf::Vector2f(
         static_cast<float>(config::CellSizePixels - 2),
         static_cast<float>(config::CellSizePixels - 2)
