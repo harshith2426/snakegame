@@ -3,6 +3,7 @@
 This folder contains the executed evidence available so far and the final Part 3 reports as they are completed. Do not treat the planning guide or this placeholder as a completed test report.
 
 - [Day 17 core gameplay test results](day17-gameplay-test-results.md) — automated execution evidence for STP TC-01 through TC-05 and TC-10, with manual-testing limits called out.
+- [Day 18 state and persistence test results](day18-state-persistence-results.md) — automated evidence for STP TC-06 through TC-09.
 
 When ready, add:
 
