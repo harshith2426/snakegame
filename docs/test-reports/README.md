@@ -12,3 +12,5 @@ When ready, add:
 - `logs/` — raw test and coverage output needed to reproduce the reports.
 
 Follow [Part 3 testing and report deliverables](../part3-testing-and-reports.md). Link the final reports from the root README after the team reviews the evidence.
+
+- [Requirements review (Issue #16)](requirements-review.md)
