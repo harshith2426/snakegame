@@ -1,6 +1,8 @@
 # Test report evidence
 
-This folder is reserved for the executed Part 3 evidence. The final reports are not present yet because the team must run the tests and record actual results first. Do not treat the planning guide or this placeholder as a completed test report.
+This folder contains the executed evidence available so far and the final Part 3 reports as they are completed. Do not treat the planning guide or this placeholder as a completed test report.
+
+- [Day 17 core gameplay test results](day17-gameplay-test-results.md) — automated execution evidence for STP TC-01 through TC-05 and TC-10, with manual-testing limits called out.
 
 When ready, add:
 
