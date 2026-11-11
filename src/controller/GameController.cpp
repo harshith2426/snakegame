@@ -10,6 +10,10 @@
 
 namespace
 {
+constexpr float WindowWidth = 800.0F;
+constexpr float WindowHeight = 640.0F;
+constexpr float HudHeight = 40.0F;
+
 using snakearcade::model::Difficulty;
 using snakearcade::model::Direction;
 using snakearcade::model::GameState;
@@ -96,7 +100,8 @@ void GameController::loadFont()
 int GameController::run()
 {
     sf::RenderWindow window(
-        sf::VideoMode(800, 600),
+        sf::VideoMode(static_cast<unsigned int>(WindowWidth),
+                      static_cast<unsigned int>(WindowHeight)),
         "SnakeArcade - Select Difficulty"
     );
 
@@ -358,7 +363,7 @@ void GameController::renderBoard(sf::RenderWindow& window) const
         ));
         foodCell.setPosition(
             static_cast<float>(session.food()->x * config::CellSizePixels + 1),
-            static_cast<float>(session.food()->y * config::CellSizePixels + 1)
+            static_cast<float>(session.food()->y * config::CellSizePixels + HudHeight + 1.0F)
         );
         foodCell.setFillColor(sf::Color(230, 60, 60));
         window.draw(foodCell);
@@ -373,7 +378,7 @@ void GameController::renderBoard(sf::RenderWindow& window) const
     {
         cell.setPosition(
             static_cast<float>(segment.x * config::CellSizePixels + 1),
-            static_cast<float>(segment.y * config::CellSizePixels + 1)
+            static_cast<float>(segment.y * config::CellSizePixels + HudHeight + 1.0F)
         );
 
         const bool isHead = segment == session.snake().head();
@@ -402,7 +407,7 @@ void GameController::renderOverlay(sf::RenderWindow& window) const
         return;
     }
 
-    sf::RectangleShape backdrop(sf::Vector2f(800.0F, 600.0F));
+    sf::RectangleShape backdrop(sf::Vector2f(WindowWidth, WindowHeight));
     backdrop.setFillColor(sf::Color(10, 14, 20, 150));
     window.draw(backdrop);
 
@@ -410,12 +415,12 @@ void GameController::renderOverlay(sf::RenderWindow& window) const
     {
         sf::Text pausedText("PAUSED", font_, 44);
         pausedText.setFillColor(sf::Color(240, 200, 80));
-        pausedText.setPosition(315.0F, 240.0F);
+        pausedText.setPosition(315.0F, 260.0F);
         window.draw(pausedText);
 
         sf::Text resumeText("Press P to resume", font_, 24);
         resumeText.setFillColor(sf::Color::White);
-        resumeText.setPosition(295.0F, 305.0F);
+        resumeText.setPosition(295.0F, 325.0F);
         window.draw(resumeText);
         return;
     }
@@ -423,7 +428,7 @@ void GameController::renderOverlay(sf::RenderWindow& window) const
     const bool won = coordinator_.isWon();
     sf::Text statusText(won ? "YOU WIN!" : "GAME OVER", font_, 44);
     statusText.setFillColor(won ? sf::Color(80, 220, 120) : sf::Color(230, 80, 80));
-    statusText.setPosition(won ? 295.0F : 270.0F, 200.0F);
+    statusText.setPosition(won ? 295.0F : 270.0F, 220.0F);
     window.draw(statusText);
 
     sf::Text scoreText(
@@ -433,13 +438,43 @@ void GameController::renderOverlay(sf::RenderWindow& window) const
         24
     );
     scoreText.setFillColor(sf::Color(255, 210, 80));
-    scoreText.setPosition(235.0F, 270.0F);
+    scoreText.setPosition(235.0F, 290.0F);
     window.draw(scoreText);
 
     sf::Text actionText("Press R to restart  |  ESC for menu", font_, 22);
     actionText.setFillColor(sf::Color::White);
-    actionText.setPosition(215.0F, 325.0F);
+    actionText.setPosition(215.0F, 345.0F);
     window.draw(actionText);
+}
+
+void GameController::renderHud(sf::RenderWindow& window) const
+{
+    if (!fontLoaded_)
+    {
+        return;
+    }
+
+    sf::RectangleShape hudBackground(sf::Vector2f(WindowWidth, HudHeight));
+    hudBackground.setFillColor(sf::Color(10, 16, 24));
+    window.draw(hudBackground);
+
+    sf::RectangleShape divider(sf::Vector2f(WindowWidth, 2.0F));
+    divider.setPosition(0.0F, HudHeight - 2.0F);
+    divider.setFillColor(sf::Color(55, 70, 82));
+    window.draw(divider);
+
+    sf::Text scoreText("SCORE: " + std::to_string(coordinator_.score()), font_, 20);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition(16.0F, 7.0F);
+    window.draw(scoreText);
+
+    sf::Text highScoreText(
+        "HIGH SCORE: " + std::to_string(coordinator_.highScore()), font_, 20
+    );
+    highScoreText.setFillColor(sf::Color(255, 210, 80));
+    const sf::FloatRect bounds = highScoreText.getLocalBounds();
+    highScoreText.setPosition(WindowWidth - bounds.width - 16.0F, 7.0F);
+    window.draw(highScoreText);
 }
 
 void GameController::render(sf::RenderWindow& window)
@@ -455,6 +490,7 @@ void GameController::render(sf::RenderWindow& window)
     {
         renderBoard(window);
         renderOverlay(window);
+        renderHud(window);
     }
 
     window.display();

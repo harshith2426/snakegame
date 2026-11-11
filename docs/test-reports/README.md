@@ -4,6 +4,7 @@ This folder contains the executed evidence available so far and the final Part 3
 
 - [Day 17 core gameplay test results](day17-gameplay-test-results.md) — automated execution evidence for STP TC-01 through TC-05 and TC-10, with manual-testing limits called out.
 - [Day 18 state and persistence test results](day18-state-persistence-results.md) — automated evidence for STP TC-06 through TC-09.
+- [Day 19 defect and regression results](day19-defect-regression-results.md) — issue #39 score HUD correction and regression evidence.
 
 When ready, add:
 
