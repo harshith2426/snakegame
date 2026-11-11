@@ -1,0 +1,10 @@
+[ 11%] Built target sfml-main
+[ 12%] Built target gtest
+[ 18%] Built target sfml-system
+[ 20%] Built target gtest_main
+[ 21%] Built target gmock
+[ 37%] Built target snakearcade_tests
+[ 61%] Built target sfml-window
+[ 63%] Built target gmock_main
+[ 90%] Built target sfml-graphics
+[100%] Built target snakearcade

@@ -28,5 +28,5 @@ The case IDs and requirement mappings follow Section 13.1 of the project SRS/SAD
 
 - TC-10 compares simulated elapsed-time inputs. Separate manual runs at two display/render frame rates were not performed.
 - Graphical play, keyboard input, and rendered collision feedback were not exhaustively system-tested in this execution. The automated tests validate the underlying model/session behavior.
-- The requirements review found that score is present in the window title but is not yet drawn in the gameplay area. This is tracked separately as issue #39; TC-03 here verifies score state changes, not the missing on-board HUD. Re-run the visual score check after that defect is fixed.
+- At this execution revision, score was present in the window title but was not drawn in the gameplay area; issue #39 tracked the gap. PR #43 later added the HUD. See [Day 19 regression results](day19-defect-regression-results.md) for the follow-up and its manual verification limits.
 - Test report scope is limited to the STP cases assigned to Day 17. Day 18 covers pause, difficulty, persistence, and malformed high-score data; the final test-report deliverable is tracked in issue #20.
