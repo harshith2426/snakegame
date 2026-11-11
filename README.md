@@ -11,7 +11,7 @@ cmake -S . -B build -G "MinGW Makefiles"
 cmake --build build
 ```
 
-The first configure fetches SFML 2.6.2 automatically. The game opens an 800×600 window with a 40×30 cell board. Use the arrow keys or WASD to steer, collect food to grow and score, and avoid walls and the snake's body. Press **R** after game over to restart.
+The first configure fetches SFML 2.6.2 automatically. The game opens an 800×640 window with a 40×30 cell board and a score/high-score HUD. Use the arrow keys or WASD to steer, collect food to grow and score, and avoid walls and the snake's body. Press **P** to pause/resume, **R** to restart after game over, and **Esc** or **M** to return to the menu after game over or winning.
 
 ## Build and run automated tests
 
@@ -82,3 +82,9 @@ The original v1.0 documents remain the team's requirements, architecture, and te
 - [Required installations and setup instructions](docs/required-installations.md)
 - [Part 3 testing and report deliverables](docs/part3-testing-and-reports.md)
 - [Part 3 test report folder and required files](docs/test-reports/README.md)
+- [Updated STP cases and SRS traceability](docs/test-reports/test-cases.md)
+- [Unit Test Report](docs/test-reports/unit-test-report.md)
+- [System Validation Report](docs/test-reports/system-validation-report.md)
+- [Code Coverage Report](docs/test-reports/code-coverage-report.md)
+- [Branch Coverage Report](docs/test-reports/branch-coverage-report.md)
+- [Demo walkthrough checklist](docs/test-reports/demo-checklist.md)

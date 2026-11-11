@@ -1,0 +1,155 @@
+Test project C:/Users/saiha/.codex/worktrees/snakegame-issue20/build-part3-coverage
+      Start  1: HighScoreManagerTest.MissingFileLoadsZero
+ 1/75 Test  #1: HighScoreManagerTest.MissingFileLoadsZero ........................................   Passed    0.03 sec
+      Start  2: HighScoreManagerTest.SavesAndLoadsHighScore
+ 2/75 Test  #2: HighScoreManagerTest.SavesAndLoadsHighScore ......................................   Passed    0.02 sec
+      Start  3: HighScoreManagerTest.LowerScoreDoesNotReplaceHighScore
+ 3/75 Test  #3: HighScoreManagerTest.LowerScoreDoesNotReplaceHighScore ...........................   Passed    0.02 sec
+      Start  4: HighScoreManagerTest.EqualScoreDoesNotReplaceHighScore
+ 4/75 Test  #4: HighScoreManagerTest.EqualScoreDoesNotReplaceHighScore ...........................   Passed    0.02 sec
+      Start  5: HighScoreManagerTest.HigherScoreUpdatesHighScore
+ 5/75 Test  #5: HighScoreManagerTest.HigherScoreUpdatesHighScore .................................   Passed    0.02 sec
+      Start  6: HighScoreManagerTest.MalformedFileLoadsZero
+ 6/75 Test  #6: HighScoreManagerTest.MalformedFileLoadsZero ......................................   Passed    0.02 sec
+      Start  7: HighScoreManagerTest.NegativeScoreIsRejected
+ 7/75 Test  #7: HighScoreManagerTest.NegativeScoreIsRejected .....................................   Passed    0.02 sec
+      Start  8: HighScoreManagerTest.ExtraDataIsRejected
+ 8/75 Test  #8: HighScoreManagerTest.ExtraDataIsRejected .........................................   Passed    0.02 sec
+      Start  9: HighScoreManagerTest.EmptyAndWhitespaceFilesLoadZero
+ 9/75 Test  #9: HighScoreManagerTest.EmptyAndWhitespaceFilesLoadZero .............................   Passed    0.02 sec
+      Start 10: HighScoreManagerTest.NegativeAndSignedValuesInFileLoadZero
+10/75 Test #10: HighScoreManagerTest.NegativeAndSignedValuesInFileLoadZero .......................   Passed    0.02 sec
+      Start 11: HighScoreManagerTest.OverflowAndDecimalValuesInFileLoadZero
+11/75 Test #11: HighScoreManagerTest.OverflowAndDecimalValuesInFileLoadZero ......................   Passed    0.02 sec
+      Start 12: HighScoreManagerTest.TrimsValidWhitespaceAroundScore
+12/75 Test #12: HighScoreManagerTest.TrimsValidWhitespaceAroundScore .............................   Passed    0.02 sec
+      Start 13: HighScoreManagerTest.UnwritablePathDoesNotOverwriteInMemoryHighScore
+13/75 Test #13: HighScoreManagerTest.UnwritablePathDoesNotOverwriteInMemoryHighScore .............   Passed    0.02 sec
+      Start 14: GameplaySessionTests.StartsWithSnakeFoodAndZeroScore
+14/75 Test #14: GameplaySessionTests.StartsWithSnakeFoodAndZeroScore .............................   Passed    0.03 sec
+      Start 15: GameplaySessionTests.CoordinatesMovementFoodGrowthAndScoring
+15/75 Test #15: GameplaySessionTests.CoordinatesMovementFoodGrowthAndScoring .....................   Passed    0.02 sec
+      Start 16: GameplaySessionTests.WallCollisionEndsSessionWithoutMovingOutsideBoard
+16/75 Test #16: GameplaySessionTests.WallCollisionEndsSessionWithoutMovingOutsideBoard ...........   Passed    0.02 sec
+      Start 17: GameplaySessionTests.SelfCollisionEndsSessionWithoutAwardingFood
+17/75 Test #17: GameplaySessionTests.SelfCollisionEndsSessionWithoutAwardingFood .................   Passed    0.02 sec
+      Start 18: GameplaySessionTests.RejectsImmediateReverseAndDoesNotAdvanceAfterGameOver
+18/75 Test #18: GameplaySessionTests.RejectsImmediateReverseAndDoesNotAdvanceAfterGameOver .......   Passed    0.02 sec
+      Start 19: GameplaySessionTests.RestartResetsSnakeScoreFoodAndMovementTimer
+19/75 Test #19: GameplaySessionTests.RestartResetsSnakeScoreFoodAndMovementTimer .................   Passed    0.02 sec
+      Start 20: GameplaySessionTests.FullBoardProducesWinInsteadOfMissingFoodState
+20/75 Test #20: GameplaySessionTests.FullBoardProducesWinInsteadOfMissingFoodState ...............   Passed    0.02 sec
+      Start 21: GameplaySessionTests.EasyDifficultyUsesSlowMovement
+21/75 Test #21: GameplaySessionTests.EasyDifficultyUsesSlowMovement ..............................   Passed    0.02 sec
+      Start 22: GameplaySessionTests.MediumDifficultyUsesNormalMovement
+22/75 Test #22: GameplaySessionTests.MediumDifficultyUsesNormalMovement ..........................   Passed    0.02 sec
+      Start 23: GameplaySessionTests.HardDifficultyUsesFastMovement
+23/75 Test #23: GameplaySessionTests.HardDifficultyUsesFastMovement ..............................   Passed    0.02 sec
+      Start 24: GameplaySessionTests.RestartPreservesSelectedDifficultyAndClearsPause
+24/75 Test #24: GameplaySessionTests.RestartPreservesSelectedDifficultyAndClearsPause ............   Passed    0.02 sec
+      Start 25: GameplaySessionTests.PauseStopsMovementAndInputWhilePreservingTimerRemainder
+25/75 Test #25: GameplaySessionTests.PauseStopsMovementAndInputWhilePreservingTimerRemainder .....   Passed    0.02 sec
+      Start 26: GameplaySessionTests.RestartWithNewDifficultyUpdatesMovementInterval
+26/75 Test #26: GameplaySessionTests.RestartWithNewDifficultyUpdatesMovementInterval .............   Passed    0.03 sec
+      Start 27: GameplaySessionTests.RapidTwoKeyTurnWithinSingleTickCannotReverseIntoNeck
+27/75 Test #27: GameplaySessionTests.RapidTwoKeyTurnWithinSingleTickCannotReverseIntoNeck ........   Passed    0.03 sec
+      Start 28: GameplaySessionTests.SelfCollisionDetectedOnRetainedTailImmediatelyAfterGrowth
+28/75 Test #28: GameplaySessionTests.SelfCollisionDetectedOnRetainedTailImmediatelyAfterGrowth ...   Passed    0.02 sec
+      Start 29: CollisionManagerTests.NoWallCollisionWithinGridBoundaries
+29/75 Test #29: CollisionManagerTests.NoWallCollisionWithinGridBoundaries ........................   Passed    0.02 sec
+      Start 30: CollisionManagerTests.DetectsWallCollisionBeyondAllFourBoundaries
+30/75 Test #30: CollisionManagerTests.DetectsWallCollisionBeyondAllFourBoundaries ................   Passed    0.02 sec
+      Start 31: CollisionManagerTests.SnakeOfLengthThreeHasNoSelfCollision
+31/75 Test #31: CollisionManagerTests.SnakeOfLengthThreeHasNoSelfCollision .......................   Passed    0.02 sec
+      Start 32: CollisionManagerTests.DetectsSelfCollisionWhenHeadCollidesWithBody
+32/75 Test #32: CollisionManagerTests.DetectsSelfCollisionWhenHeadCollidesWithBody ...............   Passed    0.02 sec
+      Start 33: CollisionManagerTests.MovingIntoVacatingTailIsNotSelfCollision
+33/75 Test #33: CollisionManagerTests.MovingIntoVacatingTailIsNotSelfCollision ...................   Passed    0.02 sec
+      Start 34: CollisionManagerTests.PrioritizesWallCollisionOverSelfCollision
+34/75 Test #34: CollisionManagerTests.PrioritizesWallCollisionOverSelfCollision ..................   Passed    0.02 sec
+      Start 35: CollisionManagerTests.WorksWithSnakeInstance
+35/75 Test #35: CollisionManagerTests.WorksWithSnakeInstance .....................................   Passed    0.02 sec
+      Start 36: FoodScoreManagerTests.SpawnsFoodAtValidGridPosition
+36/75 Test #36: FoodScoreManagerTests.SpawnsFoodAtValidGridPosition ..............................   Passed    0.02 sec
+      Start 37: FoodScoreManagerTests.FoodNeverSpawnsOnSnakeBody
+37/75 Test #37: FoodScoreManagerTests.FoodNeverSpawnsOnSnakeBody .................................   Passed    0.02 sec
+      Start 38: FoodScoreManagerTests.ReturnsNulloptWhenBoardIsFull
+38/75 Test #38: FoodScoreManagerTests.ReturnsNulloptWhenBoardIsFull ..............................   Passed    0.02 sec
+      Start 39: FoodScoreManagerTests.SpawnsInTheOnlyAvailableCell
+39/75 Test #39: FoodScoreManagerTests.SpawnsInTheOnlyAvailableCell ...............................   Passed    0.03 sec
+      Start 40: FoodScoreManagerTests.DetectsConsumptionWhenHeadMatchesFoodPosition
+40/75 Test #40: FoodScoreManagerTests.DetectsConsumptionWhenHeadMatchesFoodPosition ..............   Passed    0.02 sec
+      Start 41: FoodScoreManagerTests.IncreasesScoreWhenFoodIsConsumed
+41/75 Test #41: FoodScoreManagerTests.IncreasesScoreWhenFoodIsConsumed ...........................   Passed    0.02 sec
+      Start 42: FoodScoreManagerTests.SeededGeneratorIsDeterministic
+42/75 Test #42: FoodScoreManagerTests.SeededGeneratorIsDeterministic .............................   Passed    0.02 sec
+      Start 43: FoodScoreManagerTests.CompleteConsumptionCycleGrowsSnakeAndIncreasesScore
+43/75 Test #43: FoodScoreManagerTests.CompleteConsumptionCycleGrowsSnakeAndIncreasesScore ........   Passed    0.03 sec
+      Start 44: MovementTimerTests.DoesNotMoveBeforeInterval
+44/75 Test #44: MovementTimerTests.DoesNotMoveBeforeInterval .....................................   Passed    0.02 sec
+      Start 45: MovementTimerTests.PreservesRemainderAndCatchesUpElapsedTime
+45/75 Test #45: MovementTimerTests.PreservesRemainderAndCatchesUpElapsedTime .....................   Passed    0.02 sec
+      Start 46: MovementTimerTests.IgnoresInvalidOrNegativeElapsedTime
+46/75 Test #46: MovementTimerTests.IgnoresInvalidOrNegativeElapsedTime ...........................   Passed    0.02 sec
+      Start 47: MovementTimerTests.ResetDiscardsPartialMovementTime
+47/75 Test #47: MovementTimerTests.ResetDiscardsPartialMovementTime ..............................   Passed    2.17 sec
+      Start 48: MovementTimerTests.SameElapsedTimeProducesSameTicksAtDifferentFrameRates
+48/75 Test #48: MovementTimerTests.SameElapsedTimeProducesSameTicksAtDifferentFrameRates .........   Passed    0.02 sec
+      Start 49: SnakeTests.StartsWithThreeOrderedGridSegments
+49/75 Test #49: SnakeTests.StartsWithThreeOrderedGridSegments ....................................   Passed    0.02 sec
+      Start 50: SnakeTests.StartsMovingRight
+50/75 Test #50: SnakeTests.StartsMovingRight .....................................................   Passed    0.02 sec
+      Start 51: SnakeTests.EverySegmentIsInsideTheBoard
+51/75 Test #51: SnakeTests.EverySegmentIsInsideTheBoard ..........................................   Passed    0.02 sec
+      Start 52: SnakeTests.BoardCoordinateValidationIncludesEdgesOnly
+52/75 Test #52: SnakeTests.BoardCoordinateValidationIncludesEdgesOnly ............................   Passed    0.02 sec
+      Start 53: SnakeTests.InitialSegmentsAreDistinctAndAdjacent
+53/75 Test #53: SnakeTests.InitialSegmentsAreDistinctAndAdjacent .................................   Passed    0.02 sec
+      Start 54: SnakeTests.OccupancyQueryFindsBodyCells
+54/75 Test #54: SnakeTests.OccupancyQueryFindsBodyCells ..........................................   Passed    0.02 sec
+      Start 55: SnakeTests.MovesOneGridCellAndKeepsItsLength
+55/75 Test #55: SnakeTests.MovesOneGridCellAndKeepsItsLength .....................................   Passed    0.02 sec
+      Start 56: SnakeTests.RejectsImmediateReverseAndAllowsPerpendicularTurns
+56/75 Test #56: SnakeTests.RejectsImmediateReverseAndAllowsPerpendicularTurns ....................   Passed    0.03 sec
+      Start 57: SnakeTests.DoesNotMoveOutsideTheBoard
+57/75 Test #57: SnakeTests.DoesNotMoveOutsideTheBoard ............................................   Passed    0.02 sec
+      Start 58: SnakeTests.GrowIncreasesLengthImmediately
+58/75 Test #58: SnakeTests.GrowIncreasesLengthImmediately ........................................   Passed    0.02 sec
+      Start 59: SnakeTests.GrowRetainsTailPositionOnNextMove
+59/75 Test #59: SnakeTests.GrowRetainsTailPositionOnNextMove .....................................   Passed    0.02 sec
+      Start 60: SnakeTests.GrowMultipleSegmentsAccumulates
+60/75 Test #60: SnakeTests.GrowMultipleSegmentsAccumulates .......................................   Passed    0.02 sec
+      Start 61: Day15IntegrationTest.StartsInStartStateAndMissingFileLoadsZeroWithoutWriting
+61/75 Test #61: Day15IntegrationTest.StartsInStartStateAndMissingFileLoadsZeroWithoutWriting .....   Passed    0.02 sec
+      Start 62: Day15IntegrationTest.PausePreservesSessionAndRestartResetsSession
+62/75 Test #62: Day15IntegrationTest.PausePreservesSessionAndRestartResetsSession ................   Passed    0.02 sec
+      Start 63: Day15IntegrationTest.RejectsInvalidTransitionsAndInputsWithoutMutatingSession
+63/75 Test #63: Day15IntegrationTest.RejectsInvalidTransitionsAndInputsWithoutMutatingSession ....   Passed    0.02 sec
+      Start 64: Day15IntegrationTest.DifficultySelectionControlsSpeedAndSupportsReturnToStart
+64/75 Test #64: Day15IntegrationTest.DifficultySelectionControlsSpeedAndSupportsReturnToStart ....   Passed    0.03 sec
+      Start 65: Day15IntegrationTest.HighScoreUpdatesAndPersistsAcrossSessionsOnlyWhenBeaten
+65/75 Test #65: Day15IntegrationTest.HighScoreUpdatesAndPersistsAcrossSessionsOnlyWhenBeaten .....   Passed    0.02 sec
+      Start 66: Day15IntegrationTest.MalformedScoreFileLoadsZeroAndRecoversWhenBeaten
+66/75 Test #66: Day15IntegrationTest.MalformedScoreFileLoadsZeroAndRecoversWhenBeaten ............   Passed    0.03 sec
+      Start 67: GameStateFlowTests.StartsInStartStateWithMediumDifficulty
+67/75 Test #67: GameStateFlowTests.StartsInStartStateWithMediumDifficulty ........................   Passed    0.02 sec
+      Start 68: GameStateFlowTests.StartsSessionAndStoresSelectedDifficulty
+68/75 Test #68: GameStateFlowTests.StartsSessionAndStoresSelectedDifficulty ......................   Passed    0.02 sec
+      Start 69: GameStateFlowTests.AllowsPauseAndResumeTransitions
+69/75 Test #69: GameStateFlowTests.AllowsPauseAndResumeTransitions ...............................   Passed    0.02 sec
+      Start 70: GameStateFlowTests.FinishesOnlyAnActiveSession
+70/75 Test #70: GameStateFlowTests.FinishesOnlyAnActiveSession ...................................   Passed    0.02 sec
+      Start 71: GameStateFlowTests.CanRestartAfterGameOver
+71/75 Test #71: GameStateFlowTests.CanRestartAfterGameOver .......................................   Passed    0.02 sec
+      Start 72: GameStateFlowTests.RejectsInvalidTransitionsWithoutChangingState
+72/75 Test #72: GameStateFlowTests.RejectsInvalidTransitionsWithoutChangingState .................   Passed    0.02 sec
+      Start 73: GameStateFlowTests.ReturnsToStartOnlyFromGameOver
+73/75 Test #73: GameStateFlowTests.ReturnsToStartOnlyFromGameOver ................................   Passed    0.02 sec
+      Start 74: GameStateFlowTests.SelectDifficultyOnlyAllowedInStartState
+74/75 Test #74: GameStateFlowTests.SelectDifficultyOnlyAllowedInStartState .......................   Passed    0.02 sec
+      Start 75: TestRunner.ExecutesAssertions
+75/75 Test #75: TestRunner.ExecutesAssertions ....................................................   Passed    0.02 sec
+
+100% tests passed out of 75
+
+Total Test time (real) =   3.89 sec
