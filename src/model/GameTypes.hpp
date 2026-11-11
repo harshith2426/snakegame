@@ -35,6 +35,16 @@ enum class Collision
     Self
 };
 
+enum class GameState
+{
+    Start,
+    Playing,
+    Paused,
+    GameOver
+};
+
+using Difficulty = config::Difficulty;
+
 constexpr bool isWithinBoard(GridPosition position) noexcept
 {
     return position.x >= 0 && position.x < config::BoardColumns &&

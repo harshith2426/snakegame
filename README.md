@@ -23,7 +23,7 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-GitHub Actions runs the same configure, build, and test steps on every push and pull request. Automated tests cover the snake model, movement timing, food/scoring, collision rules, and integrated gameplay session behavior.
+GitHub Actions runs the same configure, build, and test steps on every push and pull request. Automated tests cover the snake model, movement timing, food/scoring, collision rules, state management, difficulty levels, high-score persistence, and integrated gameplay coordination.
 
 ## Day 6 snake model
 
@@ -62,10 +62,15 @@ Before starting the game, select a difficulty:
 | Arrow keys / WASD | Move snake |
 | P | Pause / Resume |
 | R | Restart after Game Over or winning |
+| Esc / M | Return to difficulty menu after Game Over or winning |
 
 ## Day 10 integrated gameplay
 
 See [Day 10 integrated gameplay](docs/day10-core-gameplay.md) for the integrated session rules and verification scope.
+
+## Day 15 state, pause, difficulty, and high-score integration
+
+See [Day 15 integration and validation](docs/day15-integration-and-validation.md) for the integrated `GameCoordinator` flow, transition rules, difficulty speeds, high-score persistence validation, and defect fixes.
 
 ## Shared project references
 
