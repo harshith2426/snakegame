@@ -2,6 +2,7 @@
 
 #include "model/GameTypes.hpp"
 #include "model/Snake.hpp"
+#include "GameTypes.hpp"
 
 #include <vector>
 
