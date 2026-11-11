@@ -28,6 +28,7 @@ private:
     void renderStartScreen(sf::RenderWindow& window) const;
     void renderBoard(sf::RenderWindow& window) const;
     void renderOverlay(sf::RenderWindow& window) const;
+    void renderHud(sf::RenderWindow& window) const;
 
     GameCoordinator coordinator_;
     sf::Font font_;
