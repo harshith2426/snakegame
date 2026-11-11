@@ -35,6 +35,23 @@ enum class Collision
     Self
 };
 
+// High-level application states
+enum class GameState
+{
+    Start,
+    Playing,
+    Paused,
+    GameOver
+};
+
+// Difficulty levels
+enum class Difficulty
+{
+    Easy,
+    Medium,
+    Hard
+};
+
 constexpr bool isWithinBoard(GridPosition position) noexcept
 {
     return position.x >= 0 && position.x < config::BoardColumns &&

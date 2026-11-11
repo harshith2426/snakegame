@@ -22,6 +22,7 @@ FetchContent_MakeAvailable(SFML)
 add_executable(snakearcade
     src/main.cpp
     src/controller/GameController.cpp
+    src/controller/GameStateFlow.cpp
     src/model/Snake.cpp
     src/model/MovementTimer.cpp
     src/model/FoodScoreManager.cpp
@@ -51,6 +52,8 @@ if(BUILD_TESTING)
         tests/model/FoodScoreManagerTests.cpp
         tests/model/CollisionManagerTests.cpp
         tests/model/GameplaySessionTests.cpp
+        tests/controller/GameStateFlowTests.cpp
+        src/controller/GameStateFlow.cpp
         src/model/Snake.cpp
         src/model/MovementTimer.cpp
         src/model/FoodScoreManager.cpp
