@@ -7,3 +7,5 @@
 /Makefile
 /compile_commands.json
 /CMakeUserPresets.json
+.vscode/
+highscore.txt

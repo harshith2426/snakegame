@@ -77,3 +77,22 @@ TEST(GameStateFlowTests, ReturnsToStartOnlyFromGameOver)
     EXPECT_TRUE(flow.returnToStart());
     EXPECT_EQ(flow.state(), GameStateFlow::State::Start);
 }
+
+TEST(GameStateFlowTests, SelectDifficultyOnlyAllowedInStartState)
+{
+    GameStateFlow flow;
+    EXPECT_TRUE(flow.selectDifficulty(GameStateFlow::Difficulty::Hard));
+    EXPECT_EQ(flow.difficulty(), GameStateFlow::Difficulty::Hard);
+
+    ASSERT_TRUE(flow.startSession(flow.difficulty()));
+    EXPECT_FALSE(flow.selectDifficulty(GameStateFlow::Difficulty::Easy));
+    EXPECT_EQ(flow.difficulty(), GameStateFlow::Difficulty::Hard);
+
+    ASSERT_TRUE(flow.pause());
+    EXPECT_FALSE(flow.selectDifficulty(GameStateFlow::Difficulty::Easy));
+
+    ASSERT_TRUE(flow.resume());
+    ASSERT_TRUE(flow.finishSession());
+    EXPECT_FALSE(flow.selectDifficulty(GameStateFlow::Difficulty::Easy));
+    EXPECT_EQ(flow.difficulty(), GameStateFlow::Difficulty::Hard);
+}

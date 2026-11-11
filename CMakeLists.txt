@@ -22,17 +22,25 @@ FetchContent_MakeAvailable(SFML)
 add_executable(snakearcade
     src/main.cpp
     src/controller/GameController.cpp
+    src/controller/GameCoordinator.cpp
     src/controller/GameStateFlow.cpp
     src/model/Snake.cpp
     src/model/MovementTimer.cpp
     src/model/FoodScoreManager.cpp
     src/model/CollisionManager.cpp
     src/model/GameplaySession.cpp
+    src/persistence/HighScoreManager.cpp
 )
 
 target_include_directories(snakearcade PRIVATE src)
 target_compile_features(snakearcade PRIVATE cxx_std_17)
 target_link_libraries(snakearcade PRIVATE sfml-graphics sfml-window sfml-system)
+
+add_custom_command(TARGET snakearcade POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+        "$<TARGET_FILE_DIR:snakearcade>/assets"
+)
 
 if(BUILD_TESTING)
     FetchContent_Declare(
@@ -47,18 +55,22 @@ if(BUILD_TESTING)
 
     add_executable(snakearcade_tests
         tests/TestRunnerTests.cpp
+        tests/controller/GameStateFlowTests.cpp
+        tests/integration/Day15IntegrationTests.cpp
         tests/model/SnakeTests.cpp
         tests/model/MovementTimerTests.cpp
         tests/model/FoodScoreManagerTests.cpp
         tests/model/CollisionManagerTests.cpp
         tests/model/GameplaySessionTests.cpp
-        tests/controller/GameStateFlowTests.cpp
+        tests/persistence/HighScoreManagerTests.cpp
+        src/controller/GameCoordinator.cpp
         src/controller/GameStateFlow.cpp
         src/model/Snake.cpp
         src/model/MovementTimer.cpp
         src/model/FoodScoreManager.cpp
         src/model/CollisionManager.cpp
         src/model/GameplaySession.cpp
+        src/persistence/HighScoreManager.cpp
     )
     target_include_directories(snakearcade_tests PRIVATE src)
     target_compile_features(snakearcade_tests PRIVATE cxx_std_17)

@@ -4,18 +4,48 @@
 
 namespace snakearcade::model
 {
-GameplaySession::GameplaySession()
+namespace
+{
+GridPosition stepPosition(GridPosition origin, Direction direction) noexcept
+{
+    switch (direction)
+    {
+    case Direction::Up:
+        --origin.y;
+        break;
+    case Direction::Down:
+        ++origin.y;
+        break;
+    case Direction::Left:
+        --origin.x;
+        break;
+    case Direction::Right:
+        ++origin.x;
+        break;
+    }
+    return origin;
+}
+} // namespace
+
+GameplaySession::GameplaySession(Difficulty difficulty)
     : snake_(),
-      movementTimer_(),
+      difficulty_(difficulty),
+      movementTimer_(config::movementInterval(difficulty)),
       foodScoreManager_(),
       collisionManager_()
 {
     spawnFoodOrFinish();
 }
 
-GameplaySession::GameplaySession(Snake snake, std::optional<GridPosition> food, unsigned int seed)
+GameplaySession::GameplaySession(
+    Snake snake,
+    std::optional<GridPosition> food,
+    unsigned int seed,
+    Difficulty difficulty
+)
     : snake_(std::move(snake)),
-      movementTimer_(),
+      difficulty_(difficulty),
+      movementTimer_(config::movementInterval(difficulty)),
       foodScoreManager_(seed),
       collisionManager_(),
       food_(food)
@@ -28,24 +58,34 @@ GameplaySession::GameplaySession(Snake snake, std::optional<GridPosition> food, 
 
 void GameplaySession::requestDirection(Direction direction) noexcept
 {
-    if (!isFinished())
+    if (isFinished() || isPaused_)
     {
-        snake_.setDirection(direction);
+        return;
     }
+
+    const auto& segments = snake_.segments();
+    if (segments.size() >= 2 && stepPosition(snake_.head(), direction) == segments[1])
+    {
+        return;
+    }
+
+    snake_.setDirection(direction);
 }
 
 void GameplaySession::advance(float elapsedSeconds) noexcept
 {
-    if (isFinished())
+    if (isFinished() || isPaused_)
     {
         return;
     }
 
     const int movementTicks = movementTimer_.advance(elapsedSeconds);
+
     for (int tick = 0; tick < movementTicks && !isFinished(); ++tick)
     {
         const GridPosition next = snake_.nextHead();
         const Collision collision = collisionManager_.checkCollision(next, snake_.segments());
+
         if (collision != Collision::None)
         {
             isGameOver_ = true;
@@ -53,6 +93,7 @@ void GameplaySession::advance(float elapsedSeconds) noexcept
         }
 
         snake_.move();
+
         if (food_.has_value() && foodScoreManager_.isConsumed(snake_.head(), *food_))
         {
             snake_.grow();
@@ -62,6 +103,32 @@ void GameplaySession::advance(float elapsedSeconds) noexcept
     }
 }
 
+void GameplaySession::pause() noexcept
+{
+    if (!isFinished())
+    {
+        isPaused_ = true;
+    }
+}
+
+void GameplaySession::resume() noexcept
+{
+    if (!isFinished())
+    {
+        isPaused_ = false;
+    }
+}
+
+bool GameplaySession::isPaused() const noexcept
+{
+    return isPaused_;
+}
+
+Difficulty GameplaySession::difficulty() const noexcept
+{
+    return difficulty_;
+}
+
 void GameplaySession::restart()
 {
     snake_.reset();
@@ -69,7 +136,16 @@ void GameplaySession::restart()
     score_ = 0;
     isGameOver_ = false;
     isWon_ = false;
+    isPaused_ = false;
+
     spawnFoodOrFinish();
+}
+
+void GameplaySession::restart(Difficulty difficulty)
+{
+    difficulty_ = difficulty;
+    movementTimer_ = MovementTimer(config::movementInterval(difficulty));
+    restart();
 }
 
 const Snake& GameplaySession::snake() const noexcept
@@ -105,6 +181,7 @@ bool GameplaySession::isFinished() const noexcept
 void GameplaySession::spawnFoodOrFinish()
 {
     food_ = foodScoreManager_.spawnFood(snake_.segments());
+
     if (!food_.has_value())
     {
         isWon_ = true;

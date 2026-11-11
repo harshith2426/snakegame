@@ -13,6 +13,9 @@ public:
     State state() const noexcept;
     Difficulty difficulty() const noexcept;
 
+    // Select difficulty while on the Start screen; rejected during active or finished sessions.
+    bool selectDifficulty(Difficulty difficulty) noexcept;
+
     // Start a new session from Start, or restart after GameOver.
     bool startSession(Difficulty difficulty) noexcept;
     bool pause() noexcept;          // Playing -> Paused

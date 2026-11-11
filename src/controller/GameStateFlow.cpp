@@ -10,6 +10,17 @@ GameStateFlow::Difficulty GameStateFlow::difficulty() const noexcept
     return difficulty_;
 }
 
+bool GameStateFlow::selectDifficulty(Difficulty difficulty) noexcept
+{
+    if (state_ != State::Start)
+    {
+        return false;
+    }
+
+    difficulty_ = difficulty;
+    return true;
+}
+
 bool GameStateFlow::startSession(Difficulty difficulty) noexcept
 {
     if (state_ != State::Start && state_ != State::GameOver)
